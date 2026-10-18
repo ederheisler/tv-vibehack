@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Launcher configuration. Edit this file, then run launcher/build-and-install.sh.
-  Package names: on the TV run `pm list packages` (tools/tv.py 'pm list packages').
+  Launcher configuration. Rebuild and reinstall the launcher after editing. See README.md.
 -->
 <resources>
 
     <!-- Apps pinned to the dock row at the bottom, in this order. Missing apps are skipped. -->
     <string-array name="dock_apps">
-        <item>com.netflix.ninja</item>
-        <item>com.amazon.amazonvideo.livingroom</item>
         <item>com.google.android.youtube.tv</item>
-        <item>in.startv.hotstar</item>
+        <item>com.crunchyroll.crunchyroid</item>
+        <item>com.spotify.tv.android</item>
+        <item>com.google.android.youtube.tvmusic</item>
     </string-array>
 
     <!-- Apps never shown as tiles (e.g. the Live TV app, which the Inputs menu already covers). -->
     <string-array name="hidden_apps">
-        <item>com.mediatek.wwtv.tvcenter</item>
-        <item>com.mitv.gallery</item>
+        <item>com.tcl.dashboard</item>
+        <item>com.tcl.tv</item>
     </string-array>
 
     <!-- The TV's Live TV / tuner app, offered at the end of the Inputs menu. Leave empty to omit. -->
-    <string name="live_tv_package" translatable="false">com.mediatek.wwtv.tvcenter</string>
+    <string name="live_tv_package" translatable="false">com.tcl.tv</string>
 
     <!-- Tiles per row in the grid; the dock always has this many slots. -->
     <integer name="columns">4</integer>
+
+    <!-- Optional foreground-launcher shortcuts. Keep both arrays in matching lengths/order.
+         Use unique, positive Android KeyEvent key codes, not raw HID usages or Linux scan codes.
+         Do not bind D-pad, Home or Back. Empty both arrays to leave all keys unchanged.
+         TCL G15 Prime key, captured on the real TV; other TV/remote models can differ.
+         This binding is local customization, not a default for other TVs. -->
+    <integer-array name="remote_button_keycodes">
+        <item>4099</item>
+    </integer-array>
+    <string-array name="remote_button_packages" translatable="false">
+        <item>com.crunchyroll.crunchyroid</item>
+    </string-array>
 </resources>

@@ -152,7 +152,7 @@ AndroidX RecyclerView and nothing heavier. It is built for sets with 1 GB of RAM
 video, no network, no background services.
 
 **Configure** it in [`launcher/app/src/main/res/values/config.xml`](launcher/app/src/main/res/values/config.xml):
-the dock order, apps to hide, your TV's Live TV package, and the number of columns.
+the dock order, apps to hide, your TV's Live TV package, the number of columns, and optional remote-button shortcuts.
 
 **Build and install** with one command:
 
@@ -174,6 +174,47 @@ is smaller and faster on 1 GB sets; sign it yourself before installing.
 **Navigation** is deliberate: Up and Down move exactly one row, Up from the dock goes to the top
 buttons, the ends of the button row don't fall through to tiles, and the last focused app is
 remembered when you come back, even after the app list changes.
+
+### Optional remote-button shortcuts
+
+A shortcut opens an app when the launcher receives its configured remote key.
+It works only while the launcher is in the foreground and receives the event.
+It does not remap buttons inside other apps, system screens, or the screensaver.
+Some TV firmware intercepts dedicated buttons before they reach the launcher.
+This feature cannot override that behavior.
+
+Edit these paired resources in `launcher/app/src/main/res/values/config.xml`, then rebuild and reinstall:
+
+- `remote_button_keycodes`: Positive Android `KeyEvent` key codes captured from the actual remote.
+  Raw HID usages and Linux scan codes are not Android key codes.
+- `remote_button_packages`: App package names in exactly the same order as the key codes.
+  Each position pairs one key code with one package name.
+- Keep both arrays empty to disable all shortcuts.
+  If their lengths differ, the launcher disables all shortcuts and writes one configuration warning.
+
+Use a unique key code for each shortcut. If a key code appears twice, the last entry wins.
+The launcher ignores nonpositive key codes and blank package names.
+Do not bind D-pad, Home, or Back, because those keys control navigation.
+Key codes can differ between TV models and remotes. Do not copy a code based only on the button label.
+For an upstream feature contribution, keep both arrays empty by default and exclude personal dock and TV configuration.
+
+The first `ACTION_DOWN` with repeat count zero opens the target app.
+The launcher consumes matching repeat events and `ACTION_UP` without another launch.
+A separate press can launch the app again. Unconfigured keys keep their existing handling.
+Events delivered after another app takes focus are outside this feature.
+
+The launcher tries the TV launch activity first, then the normal app launch activity.
+If no activity resolves, it shows `Not available on this TV` and consumes the configured key.
+A missing or disabled target can cause this result. The launcher does not install or enable the target,
+and it does not fall back to the button's original app.
+If an activity disappears before launch, the existing launch handler shows the same message.
+
+On a real TV, test a short press, a held press, and a second separate press.
+Test an unavailable target with a temporary nonexistent package name, then restore the intended package.
+Test a disabled target only with approval to change that app's state.
+Make sure that D-pad edges, Home, Back, and focus after returning from the target still work.
+Test the physical button separately from injected events, and test it inside another app to establish the foreground-only boundary.
+Button behavior and successful launching require device testing. Resource edits alone do not establish either result.
 
 <details>
 <summary><strong>Optional: the Clock screensaver</strong></summary>

@@ -55,6 +55,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     static int COLUMNS = 4;
     private static final long MINUTE_MS = 60_000L;
     private String liveTvPkg;
+    private final android.util.SparseArray<String> remoteButtonApps = new android.util.SparseArray<>();
 
     private AppAdapter adapter;
     private RecyclerView grid;
@@ -99,6 +100,24 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
     };
 
+    /** Handles only key events delivered to this foreground launcher, not global remote input. */
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        String packageName = remoteButtonApps.get(event.getKeyCode());
+        if (packageName == null) return super.dispatchKeyEvent(event);
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
+            Intent launch = getPackageManager().getLeanbackLaunchIntentForPackage(packageName);
+            if (launch == null) launch = getPackageManager().getLaunchIntentForPackage(packageName);
+            if (launch == null) {
+                Toast.makeText(this, R.string.not_available, Toast.LENGTH_SHORT).show();
+            } else {
+                open(launch);
+            }
+        }
+        // Consume repeats and release too, so one held press does not launch repeatedly or move focus.
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +125,18 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         density = getResources().getDisplayMetrics().density;
         COLUMNS = Math.max(1, getResources().getInteger(R.integer.columns));
         liveTvPkg = getString(R.string.live_tv_package).trim();
+        int[] buttonCodes = getResources().getIntArray(R.array.remote_button_keycodes);
+        String[] buttonPackages = getResources().getStringArray(R.array.remote_button_packages);
+        if (buttonCodes.length != buttonPackages.length) {
+            android.util.Log.w("TvHome", "Remote button keycode and package arrays must have equal lengths");
+        } else {
+            for (int i = 0; i < buttonCodes.length; i++) {
+                String packageName = buttonPackages[i].trim();
+                if (buttonCodes[i] > KeyEvent.KEYCODE_UNKNOWN && !packageName.isEmpty()) {
+                    remoteButtonApps.put(buttonCodes[i], packageName);
+                }
+            }
+        }
 
         root = findViewById(R.id.root);
         glass = findViewById(R.id.glass);
