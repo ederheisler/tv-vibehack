@@ -1,5 +1,7 @@
 # AGENTS.md
 
+Read [memory.md](memory.md) at the start of every session and before upstream updates or launcher installation. Preserve its required personal configuration; retiring button remapping does not retire other personalizations.
+
 Instructions for coding agents (Claude Code, Codex, Gemini CLI, Cursor, Copilot and others) working in
 this repository. People should start with [README.md](README.md) and [CONTRIBUTING.md](CONTRIBUTING.md);
 this file repeats their rules in the form an agent needs, and links to them for the detail.

@@ -1,0 +1,13 @@
+{
+  "dock_apps": [
+    "com.google.android.youtube.tv",
+    "com.crunchyroll.crunchyroid",
+    "com.spotify.tv.android",
+    "com.google.android.youtube.tvmusic"
+  ],
+  "hidden_apps": [
+    "com.tcl.dashboard",
+    "com.tcl.tv"
+  ],
+  "live_tv_package": "com.tcl.tv"
+}
