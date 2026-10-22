@@ -2,6 +2,10 @@
 
 Read this file at the start of every session and before updating upstream code or installing the launcher.
 
+## Wireless ADB prerequisite
+
+Discover the TV's ADB endpoint before connecting (`adb mdns services`; on macOS also try `dns-sd` for `_adb-tls-connect._tcp`). If discovery finds no TV, promptly ask Eder to enable Wireless debugging on the TV; do not assume it is on just because the TV and launcher are on. Retry discovery after he enables it. If still undiscovered, ask for the address and port shown on the Wireless debugging screen, and pairing details only if required.
+
 ## Personal configuration — preserve across updates
 
 Eder confirmed on 2026-10-22 that these are required configuration-only personalizations, not custom launcher code:
