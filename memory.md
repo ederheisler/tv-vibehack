@@ -6,6 +6,8 @@ Read this file at the start of every session and before updating upstream code o
 
 Discover the TV's ADB endpoint before connecting (`adb mdns services`; on macOS also try `dns-sd` for `_adb-tls-connect._tcp`). If discovery finds no TV, promptly ask Eder to enable Wireless debugging on the TV; do not assume it is on just because the TV and launcher are on. Retry discovery after he enables it. If still undiscovered, ask for the address and port shown on the Wireless debugging screen, and pairing details only if required.
 
+Own long-running helpers as named, non-blocking background services; do not make Eder run a relay when the agent can run it. A relay only helps if its process can reach the TV: an ordinary-terminal `No route to host` is evidence to diagnose the underlying network path, not to repeat the same relay workaround.
+
 ## Personal configuration — preserve across updates
 
 Eder confirmed on 2026-10-22 that these are required configuration-only personalizations, not custom launcher code:
