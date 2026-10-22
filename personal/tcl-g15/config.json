@@ -9,5 +9,12 @@
     "com.tcl.dashboard",
     "com.tcl.tv"
   ],
-  "live_tv_package": "com.tcl.tv"
+  "live_tv_package": "com.tcl.tv",
+  "app_library": true,
+  "tile_menu": true,
+  "focus_overshoot": false,
+  "home_idle_clock_minutes": 5,
+  "dock_glass": true,
+  "app_glow": true,
+  "cinematic_home": true
 }
